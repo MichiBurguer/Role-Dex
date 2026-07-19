@@ -1,7 +1,18 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
+<!-- src/App.vue -->
 <template>
-  <HelloWorld />
+  <main class="app-background">
+    <router-view />
+  </main>
 </template>
+
+<style>
+
+body {
+  margin: 0;
+  background-color: #0c1013;
+  font-family: system-ui, sans-serif;
+}
+.app-background {
+  min-height: 100vh;
+}
+</style>
