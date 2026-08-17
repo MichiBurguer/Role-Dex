@@ -72,7 +72,10 @@
 
           <div class="card-footer">
             <span class="invite-tag">Código: <strong>{{ campaign.inviteCode }}</strong></span>
-            <button class="btn btn-small">Ver Campaña →</button>
+            <router-link :to="'/campaign/' + campaign.id" class="btn btn-small">
+              Ver Campaña →
+            </router-link>
+            
           </div>
         </div>
       </div>

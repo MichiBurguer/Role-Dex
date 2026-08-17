@@ -7,7 +7,8 @@ import {
   where, 
   getDocs, 
   arrayUnion, 
-  doc, 
+  doc,
+  getDoc, 
   updateDoc 
 } from "firebase/firestore";
 
@@ -81,5 +82,23 @@ export const getUserCampaigns = async (userId) => {
     return { success: true, campaigns };
   } catch (error) {
     return { success: false, error: error.message };
+  }
+};
+
+export const getCampaignById = async (campaignId) => {
+  if (!campaignId) return null
+  try {
+    const docRef = doc(db, 'campaigns', campaignId)
+    const docSnap = await getDoc(docRef)
+
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() }
+    } else {
+      console.warn("No existe el documento con ID:", campaignId)
+      return null
+    }
+  } catch (error) {
+    console.error("Error al obtener la campaña:", error)
+    return null
   }
 };

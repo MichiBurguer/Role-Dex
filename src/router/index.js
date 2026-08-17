@@ -24,6 +24,12 @@ const routes = [
     name: 'Dashboard',
     component: () => import('../views/campaign/Dashboard.vue'),
     meta: { requiresAuth: true }
+  },
+  {
+  path: '/campaign/:campaignId',
+  name: 'CampaignView',
+  component: () => import('../views/campaign/CampaignView.vue'),
+  meta: { requiresAuth: true }
   }
 ]
 
@@ -32,22 +38,24 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, from) => {
   const authStore = useAuthStore()
 
   if (authStore.loading) {
     await authStore.initAuthListener()
   }
 
-  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    next({ name: 'Login' })
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+
+  if (requiresAuth && !authStore.isAuthenticated) {
+    return '/login'
+  } 
+
+  if ((to.path === '/login' || to.path === '/register') && authStore.isAuthenticated) {
+    return '/dashboard'
   }
-  else if ((to.name === 'Login' || to.name === 'Register') && authStore.isAuthenticated) {
-    next('/dashboard')
-  }
-  else {
-    next()
-  }
+
+  return true
 })
 
 export default router
